@@ -4,6 +4,7 @@ import sys
 import time
 import subprocess
 import requests
+import platform
 
 currDir = os.path.dirname(__file__)
 
@@ -12,6 +13,18 @@ def parser(key : str):
     idx2 = lines.find("\n", idx)
     s = lines[idx:idx2]
     return s.split(" ")[1]
+
+def local_pwd(SSID : str, pwd : str):
+    if platform.system() == 'Linux':
+        subprocess.run(['nmcli', 'dev', 'wifi', 'connect', SSID, 'password', pwd])
+    elif platform.platform() == 'Windows':
+        # TODO
+        pass
+    pass
+
+def change_wifi_pwd(pwd):
+    # TODO
+    pass
 
 
 lines = ""
@@ -23,30 +36,8 @@ pwd1 = parser("pwd1")
 pwd2 = parser("pwd2")
 
 
-subprocess.run(['whoami'])
-subprocess.run(['ls'])
-# subprocess.run(['nmcli'], shell=True)
-# subprocess.run(['nmcli', 'dev', 'wifi', 'list'], shell=True) # connect {SSID} password "{pwd2}"').stderr)
-print(subprocess.run(['nmcli', 'dev', 'wifi', 'connect', SSID, 'password', pwd2]))
+local_pwd(SSID, pwd2)
 
-session = requests.Session()
+change_wifi_pwd(pwd2)
 
-resp = session.get('http://192.168.1.1')
-
-print(resp.status_code)
-print(resp.cookies.items())
-print(resp.headers)
-print(resp.content)
-
-cookies = {
-    "s_cc": "true",
-    "s_fid": "741A73152523558E-21C25CBD0CB7A98F",
-    "s_sq": "[[B]]",
-    "xAuth_SESSION_ID": "+guhrFiyC+3cSz2HX0ZN2QA="
-}
-
-resp = session.get('http://192.168.1.1/frame_alertWifi.lp', cookies=cookies)
-print(resp.status_code)
-print(resp.cookies.items())
-print(resp.headers)
-print(resp.content)
+local_pwd(SSID, pwd2)
