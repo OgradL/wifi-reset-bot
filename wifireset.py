@@ -6,6 +6,9 @@ import subprocess
 import requests
 import platform
 
+from change_local_pwd import change_local_pwd
+from change_wifi_pwd import change_wifi_pwd
+
 currDir = os.path.dirname(__file__)
 
 def parser(key : str):
@@ -13,18 +16,6 @@ def parser(key : str):
     idx2 = lines.find("\n", idx)
     s = lines[idx:idx2]
     return s.split(" ")[1]
-
-def local_pwd(SSID : str, pwd : str):
-    if platform.system() == 'Linux':
-        subprocess.run(['nmcli', 'dev', 'wifi', 'connect', SSID, 'password', pwd])
-    elif platform.platform() == 'Windows':
-        # TODO
-        pass
-    pass
-
-def change_wifi_pwd(pwd):
-    # TODO
-    pass
 
 
 lines = ""
@@ -36,8 +27,8 @@ pwd1 = parser("pwd1")
 pwd2 = parser("pwd2")
 
 
-local_pwd(SSID, pwd2)
+change_local_pwd(SSID, pwd2)
 
 change_wifi_pwd(pwd2)
 
-local_pwd(SSID, pwd2)
+change_local_pwd(SSID, pwd2)
