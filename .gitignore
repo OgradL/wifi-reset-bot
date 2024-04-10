@@ -1,4 +1,14 @@
 
+# Removing all files without extensions
+*
+!*.*
+!*/
+
 # Password file
 .passwords.txt
 
+# Executables
+*.exe
+
+# Useless files
+*.spec

@@ -69,22 +69,16 @@ def run(playwright: Playwright) -> None:
         print(f'Accedi {i} OK')
         i=i+1
         currUrl = page.url
-    
-    # while currUrl != 'http://192.168.1.1/index.lp?subpage=welcome_page.lp':
-    #     page.frame_locator("iframe[name=\"mainFrame\"]").get_by_role("button", name="Continua").click()
-    #     page.wait_for_timeout(2000)
-    #     print('continuando..')
 
     page.frame_locator("iframe[name=\"mainFrame\"]").get_by_role("button", name="Continua").click()
     page.wait_for_timeout(2000)
     print('continuando..')
     page.wait_for_timeout(5000)
-    #page.wait_for_load_state('networkidle')
-    #page.expect_request('http://192.168.1.1/led_ajax.lp')
     print('tentativo modifica pwd')
     page.frame_locator("iframe[name=\"mainFrame\"]").get_by_role("button", name="Modifica Sicurezza").click()
     #page.frame_locator("iframe[name=\"mainFrame\"]").get_by_role("textbox").click()
     page.frame_locator("iframe[name=\"mainFrame\"]").get_by_role("textbox").focus()
+    page.wait_for_timeout(1000) ###### forse si può lasciare ma max 1 sec
     page.frame_locator("iframe[name=\"mainFrame\"]").get_by_role("textbox").press("Control+a")
     page.frame_locator("iframe[name=\"mainFrame\"]").get_by_role("textbox").fill(pwd2)
     page.frame_locator("iframe[name=\"mainFrame\"]").get_by_role("button", name="Conferma").click()
@@ -109,14 +103,11 @@ def run(playwright: Playwright) -> None:
 passwordsPath = os.path.join(dirName, ".passwords.txt")
 passwordFile = open(passwordsPath, "r")
 passwordContent = passwordFile.read()
-
+passwordFile.close()
 SSID = parser("SSID", passwordContent)
 pwd1 = parser("pwd1", passwordContent)
 pwd2 = parser("pwd2", passwordContent)
-
-#inizio
-print('Vuoi iniziare la procedura o uscire?\n')
-print('Inizia solo se il pc non è connesso/non riesce a connettersi')
+print('Vuoi iniziare la procedura o uscire?')
 print('Comincia/esci [qualunque tasto/E]')
 azione = input()
 
@@ -124,11 +115,7 @@ if azione == 'E' or azione == 'e':
     exit()
 
 #controllo connessione
-if is_internet_available():
-    print("La tua connessione a Internet è attiva. Sei già connesso con la password vecchia?")
-    azione = input("Si/No [Y/N]")
-    #cosa inutile da sviluppare
-else:
+if not is_internet_available():
     #connessione con PWD vecchia
     connect_to_wifi('Telecom-57112448', pwd1)
 
