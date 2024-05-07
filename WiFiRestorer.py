@@ -39,12 +39,17 @@ def resetProfile():
     file.close()
 
 def connect_to_wifi(ssid, password):
-    modProfile(password)
-    try:
-        subprocess.run(['netsh', 'wlan', 'add', 'profile', 'filename="' + ProfilePath + '"'])
-        subprocess.run(['netsh', 'wlan', 'connect', 'name=' + ssid])
-    except subprocess.CalledProcessError as e:
-        print("Errore durante la connessione al WiFi:", e)
+    if platform.system() == 'Linux':
+        subprocess.run(['nmcli', 'dev', 'wifi', 'connect', ssid, 'password', password])
+    elif platform.platform() == 'Windows':
+        modProfile(password)
+        try:
+            subprocess.run(['netsh', 'wlan', 'add', 'profile', 'filename="' + ProfilePath + '"'])
+            subprocess.run(['netsh', 'wlan', 'connect', 'name=' + ssid])
+        except subprocess.CalledProcessError as e:
+            print("Errore durante la connessione al WiFi:", e)
+    else:
+        print("platform not supported :\\")
 
 def is_internet_available():
     try:
