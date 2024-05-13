@@ -1,6 +1,7 @@
 import subprocess
 import requests
 import os
+import platform
 from playwright.sync_api import Playwright, sync_playwright, expect
 
 ProfileName = "WiFi-Telecom-57112448.xml"
@@ -112,17 +113,17 @@ passwordFile.close()
 SSID = parser("SSID", passwordContent)
 pwd1 = parser("pwd1", passwordContent)
 pwd2 = parser("pwd2", passwordContent)
-print('Vuoi iniziare la procedura o uscire?')
-print('Comincia/esci [qualunque tasto/E]')
-azione = input()
-
-if azione == 'E' or azione == 'e':
-    exit()
+# print('Vuoi iniziare la procedura o uscire?')
+# print('Comincia/esci [qualunque tasto/E]')
+# azione = input()
+# 
+# if azione == 'E' or azione == 'e':
+#     exit()
 
 #controllo connessione
 if not is_internet_available():
     #connessione con PWD vecchia
-    connect_to_wifi('Telecom-57112448', pwd1)
+    connect_to_wifi(SSID, pwd1)
 
 #controllo connessione
 print('Provo a connettermi...')
@@ -137,6 +138,6 @@ with sync_playwright() as playwright:
 
 #riconnessione a internet
 print('Mi riconnetto...')
-connect_to_wifi('Telecom-57112448', pwd2)
+connect_to_wifi(SSID, pwd2)
 
 resetProfile()
