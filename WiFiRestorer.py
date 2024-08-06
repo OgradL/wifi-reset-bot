@@ -59,7 +59,7 @@ def is_internet_available():
     except:
         return False
 
-def run(playwright: Playwright) -> None:
+def run(playwright: Playwright):
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
@@ -121,15 +121,24 @@ pwd2 = parser("pwd2", passwordContent)
 #     exit()
 
 #controllo connessione
-if not is_internet_available():
-    #connessione con PWD vecchia
-    connect_to_wifi(SSID, pwd1)
-
-#controllo connessione
 print('Provo a connettermi...')
-while(not is_internet_available()):
-    is_internet_available()
+lastAttempt = ""
+while True:
+    #connessione con PWD vecchia
+    if not is_internet_available():
+        connect_to_wifi(SSID, pwd1)
+        lastAttempt = pwd1
+    if not is_internet_available():
+        connect_to_wifi(SSID, pwd2)
+        lastAttempt = pwd2
+    if is_internet_available():
+        break;
+
 print('Connesso!\n')
+
+if lastAttempt == pwd2:
+    print("Niente da cambiare!")
+    exit()
 
 #va sul browser
 #SPOSTA su la riga import E sposta su la funzione
