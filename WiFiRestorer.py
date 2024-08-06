@@ -42,7 +42,7 @@ def resetProfile():
 def connect_to_wifi(ssid, password):
     if platform.system() == 'Linux':
         subprocess.run(['nmcli', 'dev', 'wifi', 'connect', ssid, 'password', password])
-    elif platform.platform() == 'Windows':
+    elif platform.system() == 'Windows':
         modProfile(password)
         try:
             subprocess.run(['netsh', 'wlan', 'add', 'profile', 'filename="' + ProfilePath + '"'])
